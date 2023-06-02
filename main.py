@@ -1,9 +1,10 @@
 import datetime
 import json
 
-from func import *
+from account import Account
 from mealtime import MealTime, Singleton
-from restaurant import Menu, Restaurant
+from restaurant import Restaurant
+from menu import Menu
 
 menu = []
 restaurants = []
@@ -21,14 +22,27 @@ with open('./resource/restaurants.json', 'r', encoding='utf-8') as f:
 
 
 class MainService(Singleton):
+
+    # 기능 출력
+    @staticmethod
+    def print_main_menu():
+        print('--------식권대장---------\n'
+              '1. 식사하기\n'
+              '2. 식사 시간대 변경하기')
+        input_num = input('원하는 번호를 선택하세요. : ')
+        return int(input_num)
+
+    # 메인프로그램 시작
     @staticmethod
     def start_service():
         try:
             current = time.get_current_meal_time(current_time)
-            user = input_user(current)
-            selected_restaurant = choose_restaurant(user, restaurants)
+            print(current, '식사시간, 당신의 이름을 입력하세요')
+            user = Account.input_user()
+            selected_restaurant = Restaurant.choose_restaurant(user, restaurants)
             cur_menu_in_selected_restaurant = [m for m in selected_restaurant.menu if m.time == current]
-            choose_menu(current, cur_menu_in_selected_restaurant)
+            selected_menu = Menu.choose_menu(current, cur_menu_in_selected_restaurant)
+            print(selected_menu.price, '원이 결제되었습니다.')
         except Exception as e:
             print(e)
             quit()
@@ -36,14 +50,14 @@ class MainService(Singleton):
 
 def main():
     try:
-        input_num = print_main_menu()
-        if input_num == 1:
+        input_num = MainService.print_main_menu()
+        if input_num == 1:  # 메인프로그램 시작
             MainService.start_service()
-        elif input_num == 2:
+        elif input_num == 2:  # 시간대 변경
             time.change_meal_time()
             main()
         else:
-            raise WrongInput
+            raise ValueError('올바른 메뉴번호를 선택하세요.')
     except Exception as e:
         print(e)
 

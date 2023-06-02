@@ -1,22 +1,25 @@
-from error import WrongInput
-
-
 class Restaurant:
     def __init__(self, code, name, menu):
         self.code = code
         self.name = name
         self.menu = menu
 
-    def is_restaurant_by_code(self, code):
+    def is_selected_restaurant(self, code):
         return self.code == code
 
+    # 식당 선택
+    @staticmethod
+    def choose_restaurant(restaurants):
+        for r in restaurants:
+            print(r.code, '.', r.name)
 
-class Menu:
-    def __init__(self, code, name, price, time):
-        self.code = code
-        self.name = name
-        self.price = price
-        self.time = time
+        selected_restaurant_code = int(input())
 
-    def is_selected_menu(self, code):
-        return self.code == code
+        selected_restaurant = None
+        for r in restaurants:
+            if r.is_selected_restaurant(selected_restaurant_code):
+                selected_restaurant = r
+                break
+        if selected_restaurant is None:
+            raise ValueError('식당코드가 올바르지 않습니다.')
+        return selected_restaurant

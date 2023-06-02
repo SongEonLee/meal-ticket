@@ -1,7 +1,5 @@
 import datetime
 
-from error import WrongInput
-
 
 class Singleton:
     _instance = None
@@ -12,7 +10,6 @@ class Singleton:
         return cls._instance
 
 
-# 싱글톤으로
 class MealTime(Singleton):
     admin_password = 'admin'
 
@@ -38,9 +35,9 @@ class MealTime(Singleton):
         input_pw = input('관리자 비밀번호를 입력하세요. ')
 
         if input_pw != self.admin_password:
-            raise WrongInput
+            raise ValueError('비밀번호가 틀렸습니다.')
 
-        print('변경할 시간대번호를 선택하고 변경할 시간(정시기준 숫자)을 입력해주세요.\n'
+        print('변경할 시간대의 번호와 변경할 시간(정시기준)을 숫자만 입력해주세요.\n'
               '1. breakfast_start\n'
               '2. breakfast_end\n'
               '3. lunch_start\n'
@@ -62,6 +59,6 @@ class MealTime(Singleton):
         elif int(time_num) == 6:
             self.dinner_end = datetime.time(int(hour), 0)
         else:
-            raise WrongInput
+            raise ValueError('입력이 올바르지 않습니다.')
 
 
