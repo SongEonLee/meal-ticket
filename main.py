@@ -2,6 +2,7 @@ import datetime
 import json
 
 from account import Account
+from exception import InvalidCodeException, check_is_digit
 from mealtime import MealTime, Singleton
 from restaurant import Restaurant
 from menu import Menu
@@ -30,36 +31,40 @@ class MainService(Singleton):
               '1. 식사하기\n'
               '2. 식사 시간대 변경하기')
         input_num = input('원하는 번호를 선택하세요. : ')
+        check_is_digit(input_num)
         return int(input_num)
 
     # 메인프로그램 시작
     @staticmethod
     def start_service():
         try:
-            current = time.get_current_meal_time(current_time)
-            print(current, '식사시간, 당신의 이름을 입력하세요')
-            user = Account.input_user()
-            selected_restaurant = Restaurant.choose_restaurant(user, restaurants)
-            cur_menu_in_selected_restaurant = [m for m in selected_restaurant.menu if m.time == current]
-            selected_menu = Menu.choose_menu(current, cur_menu_in_selected_restaurant)
-            print(selected_menu.price, '원이 결제되었습니다.')
+            current = time.get_current_meal_time(current_time)  # NotMealTimeException -> main()
         except Exception as e:
             print(e)
-            quit()
+            main()
+
+        print(current, '식사시간, 당신의 이름을 입력하세요')
+        user = Account.input_user()
+        selected_restaurant = Restaurant.choose_restaurant(user, restaurants)
+        cur_menu_in_selected_restaurant = [m for m in selected_restaurant.menu if m.time == current]
+        selected_menu = Menu.choose_menu(current, cur_menu_in_selected_restaurant)
+        print(selected_menu.price, '원이 결제되었습니다.')
 
 
 def main():
-    try:
-        input_num = MainService.print_main_menu()
-        if input_num == 1:  # 메인프로그램 시작
-            MainService.start_service()
-        elif input_num == 2:  # 시간대 변경
-            time.change_meal_time()
-            main()
-        else:
-            raise ValueError('올바른 메뉴번호를 선택하세요.')
-    except Exception as e:
-        print(e)
+    while True:
+        try:
+            input_num = MainService.print_main_menu()
+            if input_num == 1:  # 메인프로그램 시작
+                MainService.start_service()
+            elif input_num == 2:  # 시간대 변경
+                time.change_meal_time()
+                main()
+            else:
+                raise InvalidCodeException()
+            break
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":

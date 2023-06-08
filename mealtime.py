@@ -1,5 +1,7 @@
 import datetime
 
+from exception import NotMealTimeException, InvalidCodeException, check_input_have_value
+
 
 class Singleton:
     _instance = None
@@ -29,7 +31,7 @@ class MealTime(Singleton):
         elif self.dinner_start <= current_time <= self.dinner_end:
             return "저녁"
         else:
-            raise Exception('식사시간이 아닙니다.')
+            raise NotMealTimeException()
 
     def change_meal_time(self):
         input_pw = input('관리자 비밀번호를 입력하세요. ')
@@ -37,7 +39,7 @@ class MealTime(Singleton):
         if input_pw != self.admin_password:
             raise ValueError('비밀번호가 틀렸습니다.')
 
-        print('변경할 시간대의 번호와 변경할 시간(정시기준)을 숫자만 입력해주세요.\n'
+        print('변경할 시간대의 번호를 입력해주세요.\n'
               '1. breakfast_start\n'
               '2. breakfast_end\n'
               '3. lunch_start\n'
@@ -45,20 +47,25 @@ class MealTime(Singleton):
               '5. dinner_start\n'
               '6. dinner_end')
 
-        time_num, hour = input().split()
+        time_num = input()
+        check_input_have_value(time_num)
         if int(time_num) == 1:
-            self.breakfast_start = datetime.time(int(hour), 0)
+            hour = int(input(f'{self.breakfast_start} 변경할 시간을 정시 숫자로 입력해주세요. '))
+            self.breakfast_start = datetime.time(hour, 0)
         elif int(time_num) == 2:
-            self.breakfast_end = datetime.time(int(hour), 0)
+            hour = int(input(f'{self.breakfast_end} 변경할 시간을 정시 숫자로 입력해주세요. '))
+            self.breakfast_end = datetime.time(hour, 0)
         elif int(time_num) == 3:
-            self.lunch_start = datetime.time(int(hour), 0)
+            hour = int(input(f'{self.lunch_start} 변경할 시간을 정시 숫자로 입력해주세요. '))
+            self.lunch_start = datetime.time(hour, 0)
         elif int(time_num) == 4:
-            self.lunch_end = datetime.time(int(hour), 0)
+            hour = int(input(f'{self.lunch_end} 변경할 시간을 정시 숫자로 입력해주세요. '))
+            self.lunch_end = datetime.time(hour, 0)
         elif int(time_num) == 5:
-            self.dinner_start = datetime.time(int(hour), 0)
+            hour = int(input(f'{self.dinner_start} 변경할 시간을 정시 숫자로 입력해주세요. '))
+            self.dinner_start = datetime.time(hour, 0)
         elif int(time_num) == 6:
-            self.dinner_end = datetime.time(int(hour), 0)
+            hour = int(input(f'{self.dinner_end} 변경할 시간을 정시 숫자로 입력해주세요. '))
+            self.dinner_end = datetime.time(hour, 0)
         else:
-            raise ValueError('입력이 올바르지 않습니다.')
-
-
+            raise InvalidCodeException()

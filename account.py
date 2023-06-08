@@ -1,3 +1,5 @@
+from exception import check_input_have_value
+
 
 class Account:
 
@@ -8,4 +10,11 @@ class Account:
     @staticmethod
     def input_user():
         username = input()
-        return Account(username)
+        while True:
+            try:
+                check_input_have_value(username)
+                user = Account(username)
+                break
+            except Exception as e:
+                print(e)
+        return user
