@@ -1,6 +1,6 @@
 import datetime
 
-from exception import NotMealTimeException, InvalidCodeException, check_input_have_value
+from exception import NotMealTimeException, InvalidCodeException, check_input_have_value, InvalidPasswordException
 
 
 class Singleton:
@@ -37,7 +37,7 @@ class MealTime(Singleton):
         input_pw = input('관리자 비밀번호를 입력하세요. ')
 
         if input_pw != self.admin_password:
-            raise ValueError('비밀번호가 틀렸습니다.')
+            raise InvalidPasswordException()
 
         print('변경할 시간대의 번호를 입력해주세요.\n'
               '1. breakfast_start\n'

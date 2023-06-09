@@ -27,7 +27,12 @@ class NoInputException(CustomException):
 
 
 class InvalidCodeException(CustomException):
-    def __init__(self, msg='유효하지 않은 번호입니다.'):
+    def __init__(self, msg='유효하지 않은 번호입니다'):
+        super().__init__(msg)
+
+
+class InvalidPasswordException(CustomException):
+    def __init__(self, msg='비밀번호가 틀렸습니다'):
         super().__init__(msg)
 
 
