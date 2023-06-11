@@ -49,6 +49,7 @@ class MainService(Singleton):
         cur_menu_in_selected_restaurant = [m for m in selected_restaurant.menu if m.time == current]
         selected_menu = Menu.choose_menu(current, cur_menu_in_selected_restaurant)
         print(selected_menu.price, '원이 결제되었습니다.')
+        quit()
 
 
 def main():
