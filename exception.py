@@ -36,14 +36,4 @@ class InvalidPasswordException(CustomException):
         super().__init__(msg)
 
 
-def check_input_have_value(value):
-    if not value:
-        raise NoInputException()
-    elif value.isspace():
-        raise BlankException()
 
-
-def check_is_digit(value):
-    check_input_have_value(value)
-    if not value.isdigit():
-        raise NotIntegerException()
