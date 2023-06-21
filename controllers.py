@@ -2,10 +2,10 @@ from datetime import time
 
 from exception import InvalidCodeException, InvalidPasswordException, NotIntegerException
 from models import Account, restaurants, MealTime
-from utils import Util
+from utils import Util, Singleton
 
 
-class AccountController:
+class AccountController(Singleton):
     admin_password = 'admin'
 
     # 사용자 객체 생성
@@ -27,7 +27,7 @@ class AccountController:
             raise InvalidPasswordException()
 
 
-class RestaurantController:
+class RestaurantController(Singleton):
     # 식당 선택
     @staticmethod
     def choose_restaurant(selected_restaurant_code):
@@ -48,7 +48,7 @@ class RestaurantController:
         return restaurants
 
 
-class MenuController:
+class MenuController(Singleton):
     # 메뉴 선택
     @staticmethod
     def choose_menu(cur_menu_in_selected_restaurant):
@@ -70,7 +70,7 @@ class MenuController:
         return [m for m in selected_restaurant.menu if m.time == current]
 
 
-class TimeController:
+class TimeController(Singleton):
     @staticmethod
     def change_meal_time():
         meat_time = MealTime()
