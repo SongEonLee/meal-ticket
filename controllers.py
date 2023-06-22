@@ -1,7 +1,7 @@
 from datetime import time
 
 from exception import InvalidCodeException, InvalidPasswordException, NotIntegerException
-from models import Account, restaurants, MealTime
+from models import Account, MealTime, Restaurant
 from utils import Util, Singleton
 
 
@@ -35,7 +35,7 @@ class RestaurantController(Singleton):
             try:
                 Util.check_is_digit(selected_restaurant_code)
                 selected_restaurant = next(
-                    (r for r in restaurants if r.is_selected_restaurant(int(selected_restaurant_code))), None)
+                    (r for r in RestaurantController.get_all_restaurant() if r.is_selected_restaurant(int(selected_restaurant_code))), None)
                 if selected_restaurant is None:
                     raise InvalidCodeException()
                 break
@@ -45,7 +45,7 @@ class RestaurantController(Singleton):
 
     @staticmethod
     def get_all_restaurant():
-        return restaurants
+        return Restaurant.get_all()
 
 
 class MenuController(Singleton):

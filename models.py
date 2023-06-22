@@ -19,6 +19,16 @@ class Restaurant:
     def is_selected_restaurant(self, code):
         return self.code == code
 
+    @staticmethod
+    def get_all():
+        restaurants = []
+        with open('./resource/restaurants.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            for item in data:
+                restaurant_menu = [m for m in Menu.get_all() if m.code in item['menu_id']]
+                restaurants.append(Restaurant(item['code'], item['name'], restaurant_menu))
+        return restaurants
+
 
 class Menu:
     def __init__(self, code, name, price, time):
@@ -30,20 +40,14 @@ class Menu:
     def is_selected_menu(self, code):
         return self.code == code
 
-
-menu = []
-restaurants = []
-
-with open('./resource/menu.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-    for item in data:
-        menu.append(Menu(item['code'], item['name'], item['price'], item['time']))
-
-with open('./resource/restaurants.json', 'r', encoding='utf-8') as f:
-    data = json.load(f)
-    for item in data:
-        restaurant_menu = [m for m in menu if m.code in item['menu_id']]
-        restaurants.append(Restaurant(item['code'], item['name'], restaurant_menu))
+    @staticmethod
+    def get_all():
+        menu = []
+        with open('./resource/menu.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            for item in data:
+                menu.append(Menu(item['code'], item['name'], item['price'], item['time']))
+        return menu
 
 
 class MealTime(Singleton):
