@@ -1,3 +1,4 @@
+from abc import ABC, ABCMeta, abstractmethod
 from datetime import time
 
 from exception import InvalidCodeException, InvalidPasswordException, NotIntegerException
@@ -9,8 +10,7 @@ class AccountController(Singleton):
     admin_password = 'admin'
 
     # 사용자 객체 생성
-    @staticmethod
-    def input_user():
+    def input_user(self):
         username = input()
         while True:
             try:
@@ -21,21 +21,20 @@ class AccountController(Singleton):
                 print(e)
         return user
 
-    @staticmethod
-    def check_admin_password(input_pw):
+    def check_admin_password(self, input_pw):
         if input_pw != AccountController.admin_password:
             raise InvalidPasswordException()
 
 
 class RestaurantController(Singleton):
     # 식당 선택
-    @staticmethod
-    def choose_restaurant(selected_restaurant_code):
+    def choose_restaurant(self, selected_restaurant_code):
         while True:
             try:
                 Util.check_is_digit(selected_restaurant_code)
                 selected_restaurant = next(
-                    (r for r in RestaurantController.get_all_restaurant() if r.is_selected_restaurant(int(selected_restaurant_code))), None)
+                    (r for r in RestaurantController.get_all_restaurant() if
+                     r.get_code() == int(selected_restaurant_code)), None)
                 if selected_restaurant is None:
                     raise InvalidCodeException()
                 break
@@ -43,15 +42,13 @@ class RestaurantController(Singleton):
                 print(e)
         return selected_restaurant
 
-    @staticmethod
-    def get_all_restaurant():
+    def get_all_restaurant(self):
         return Restaurant.get_all()
 
 
 class MenuController(Singleton):
     # 메뉴 선택
-    @staticmethod
-    def choose_menu(cur_menu_in_selected_restaurant):
+    def choose_menu(self, cur_menu_in_selected_restaurant):
         while True:
             selected_menu_code = input()
             try:
@@ -65,14 +62,13 @@ class MenuController(Singleton):
                 print(e)
         return selected_menu
 
-    @staticmethod
-    def get_cur_menu_list(current, selected_restaurant):
+    def get_cur_menu_list(self, current, selected_restaurant):
         return [m for m in selected_restaurant.menu if m.time == current]
 
 
 class TimeController(Singleton):
-    @staticmethod
-    def change_meal_time():
+
+    def change_meal_time(self):
         meat_time = MealTime()
         print(meat_time)
         breakfast_start = meat_time.breakfast_start

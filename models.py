@@ -12,12 +12,12 @@ class Account:
 
 class Restaurant:
     def __init__(self, code, name, menu):
-        self.code = code
-        self.name = name
-        self.menu = menu
+        self._code = code
+        self._name = name
+        self.__menu = menu
 
-    def is_selected_restaurant(self, code):
-        return self.code == code
+    def get_code(self):
+        return self.code
 
     @staticmethod
     def get_all():

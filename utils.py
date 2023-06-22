@@ -15,7 +15,7 @@ class Singleton:
         return cls._instance
 
 
-class Util(Singleton):
+class Util:
     @staticmethod
     def check_input_have_value(value):
         if not value:
